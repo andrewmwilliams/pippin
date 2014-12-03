@@ -8,6 +8,7 @@ public class Machine extends Observable {
     public final Map<String, Instruction> INSTRUCTION_MAP = new TreeMap<>();
     private Memory memory = new Memory();
     private Processor cpu = new Processor();
+    private Code code = new Code();
 
 // ADD DELEGATE METHODS FOR int setData, int getData, and int[] getData from memory
 // all the setters and getters of cpu, and the incrementCounter
@@ -232,5 +233,17 @@ public class Machine extends Observable {
 
 	public int getData(int index) {
 		return memory.getData(index);
+	}
+	
+	public Processor getCpu() {
+		return cpu;
+	}
+	
+	public Memory getMemory() {
+		return memory;
+	}
+	
+	public Code getCode() {
+		return code;
 	}
 }
