@@ -9,6 +9,7 @@ public class Machine extends Observable {
     private Memory memory = new Memory();
     private Processor cpu = new Processor();
     private Code code = new Code();
+    private States state;
 
 // ADD DELEGATE METHODS FOR int setData, int getData, and int[] getData from memory
 // all the setters and getters of cpu, and the incrementCounter
@@ -100,15 +101,14 @@ public class Machine extends Observable {
         	else
         		cpu.incrementCounter();
         });
-        /*TO DO: FIX HALT!!*/
         //HALT
         INSTRUCTION_MAP.put("0xF", (int arg, boolean immediate, boolean indirect) -> {
         	if(immediate)
         		throw new IllegalInstructionModeException("attempt to execute immediate HALT");
         	else if(indirect)
         		throw new IllegalInstructionModeException("attempt to execute indirect HALT");
-      //  	else
-      //  		halt();
+        	else
+        		halt();
         });
         //SUB
         INSTRUCTION_MAP.put("0x4", (int arg, boolean immediate, boolean indirect) -> {
@@ -198,7 +198,18 @@ public class Machine extends Observable {
         	cpu.incrementCounter();
         });
     }
+    
+    //Hopefully someday there will be some code in here
+    public void halt() {}
 
+    public void step() {}
+
+    public void clearAll() {}
+    
+    public void reload() {}
+    
+    public void toggleAutoStep() {}
+    
     public  Map<String, Instruction> getInstructionMap() {
     	return INSTRUCTION_MAP;
     }
@@ -245,5 +256,9 @@ public class Machine extends Observable {
 	
 	public Code getCode() {
 		return code;
+	}
+	
+	public States getState() {
+		return state;
 	}
 }
