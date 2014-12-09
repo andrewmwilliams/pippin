@@ -19,8 +19,8 @@ import javax.swing.border.TitledBorder;
 public class MemoryViewPanel implements Observer {
 	private Memory memory = new Memory();
 	private JScrollPane scroller = new JScrollPane();
-	private JTextField[] dataDecimal = new JTextField[Code.CODE_MAX];
-	private JTextField[] dataHex = new JTextField[Code.CODE_MAX];
+	private JTextField[] dataDecimal = new JTextField[Memory.DATA_SIZE];
+	private JTextField[] dataHex = new JTextField[Memory.DATA_SIZE];
 	private int lower;
 	private int upper;
 	
@@ -45,7 +45,7 @@ public class MemoryViewPanel implements Observer {
         decimalPanel.setLayout(new GridLayout(0,1));
         hexPanel.setLayout(new GridLayout(0,1));
         
-        for(int i = 0; i < Code.CODE_MAX; i++) {
+        for(int i = 0; i < Memory.DATA_SIZE; i++) {
         	numPanel.add(new JLabel(i + ": ", JLabel.RIGHT));
         	dataDecimal[i] = new JTextField(10);
         	dataHex[i] = new JTextField(10);
@@ -67,6 +67,14 @@ public class MemoryViewPanel implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
+		
+		//FIX THIS
+		//for(int i = lower; i < 256; i++) {
+		for(int i = lower; i < upper; i++) {
+            //if(memory.getData(i) != 0) System.out.println("DMupdate " + lower + " " + i + " " + memory.getData(i));
+        	dataDecimal[i].setText(""+memory.getData(i));
+            dataHex[i].setText(Integer.toHexString(memory.getData(i)));
+        }
 	}
 
 	

@@ -31,6 +31,12 @@ public class CodeViewPanel implements Observer {
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
+        if(code != null) {
+            for(int i = 0; i < Code.CODE_MAX; i++) {
+                codeText[i].setText(code.getCodeText(i));
+                codeHex[i].setText(code.getCodeHex(i));
+            }           
+        }
 	}
 	
 	public JPanel createCodeDisplay() {

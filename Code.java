@@ -19,8 +19,6 @@ public class Code {
 		return program.get(i).arg;
 	}
 	
-	//Project specification says to return true if program.get(i).op is
-	//between 0x100 and 0x200, but is unclear if this includes endpoints
 	public boolean getImmediate(int i) {
 		if(program.get(i).op > 0x100 && program.get(i).op < 0x200)
 			return true;
@@ -28,7 +26,6 @@ public class Code {
 		return false;
 	}
 	
-	//Same problem as the comment above
 	public boolean getIndirect(int i) {
 		if(program.get(i).op > 0x200)
 			return true;
