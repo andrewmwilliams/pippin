@@ -322,6 +322,9 @@ public class Machine extends Observable {
     }
 
     public void clearAll() {
+    	memoryViewPanel1.resetPreviousColor();
+    	memoryViewPanel2.resetPreviousColor();
+    	memoryViewPanel3.resetPreviousColor();
     	memory.clear();
     	code.clear();
     	cpu.setAccumulator(0);

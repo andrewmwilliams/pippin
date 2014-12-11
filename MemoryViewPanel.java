@@ -4,17 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 
 public class MemoryViewPanel implements Observer {
 	private Memory memory = new Memory();
@@ -23,6 +21,7 @@ public class MemoryViewPanel implements Observer {
 	private JTextField[] dataHex = new JTextField[Memory.DATA_SIZE];
 	private int lower;
 	private int upper;
+	private int previousColor = -1;
 	
 	public MemoryViewPanel(Machine machine, int lower, int upper) {
 		memory = machine.getMemory();
@@ -66,18 +65,48 @@ public class MemoryViewPanel implements Observer {
 	}	
 	
 	@Override
-	public void update(Observable o, Object arg) {
-		
-		//FIX THIS
-		//for(int i = lower; i < 256; i++) {
-		for(int i = lower; i < upper; i++) {
-            //if(memory.getData(i) != 0) System.out.println("DMupdate " + lower + " " + i + " " + memory.getData(i));
-        	dataDecimal[i].setText(""+memory.getData(i));
+	public void update(Observable arg0, Object arg1) {
+        for(int i = lower; i < upper; i++) {
+            dataDecimal[i].setText(""+memory.getData(i));
             dataHex[i].setText(Integer.toHexString(memory.getData(i)));
         }
+		if(arg1 != null && arg1.equals("Clear")) {
+			for(int i = lower; i < upper; i++) {
+				dataDecimal[i].setText("");
+				dataHex[i].setText("");
+			}
+			if(previousColor >= 0) {
+				dataDecimal[previousColor].setBackground(Color.WHITE);
+				dataHex[previousColor].setBackground(Color.WHITE);
+				previousColor = -1;
+			}
+		}
+		if(previousColor >= lower && previousColor <= upper) {
+			dataDecimal[previousColor].setBackground(Color.WHITE);
+			dataHex[previousColor].setBackground(Color.WHITE);
+			previousColor = memory.getChangedIndex();
+			if(previousColor >= lower && previousColor <= upper) {
+				dataDecimal[previousColor].setBackground(Color.YELLOW);
+				dataHex[previousColor].setBackground(Color.YELLOW);
+			
+			}
+		}
+        if(scroller != null && memory != null) {
+            JScrollBar bar= scroller.getVerticalScrollBar();
+            if (memory.getChangedIndex() >= lower &&
+                    memory.getChangedIndex() < upper && 
+                    dataDecimal[memory.getChangedIndex()] != null) {
+                Rectangle bounds = dataDecimal[memory.getChangedIndex()].getBounds();
+                bar.setValue(Math.max(0, bounds.y - 15*bounds.height));
+            }
+        }
+	}
+	
+	public void resetPreviousColor() {
+		previousColor = -1;
 	}
 
-	
+	/*
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -90,4 +119,5 @@ public class MemoryViewPanel implements Observer {
             }
         });
     }
+    */
 }
